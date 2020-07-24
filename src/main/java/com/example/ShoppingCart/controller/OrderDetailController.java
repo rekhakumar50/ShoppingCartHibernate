@@ -1,8 +1,8 @@
 package com.example.ShoppingCart.controller;
 
-import com.example.ShoppingCart.dto.CartInfo;
-import com.example.ShoppingCart.dto.CartLineInfo;
-import com.example.ShoppingCart.dto.OrderDetailInfo;
+import com.example.ShoppingCart.dto.CartDto;
+import com.example.ShoppingCart.dto.CartLineDto;
+import com.example.ShoppingCart.dto.OrderDetailDto;
 import com.example.ShoppingCart.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,18 +18,18 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
 
     @GetMapping("/{orderId}")
-    public List<OrderDetailInfo> getAllOrderDetailsByOrderId(@PathVariable Long orderId) {
+    public List<OrderDetailDto> getAllOrderDetailsByOrderId(@PathVariable Long orderId) {
         return orderDetailService.getAllOrderDetailsByOrderId(orderId);
     }
 
     @PostMapping
-    public void saveOrderDetails(@Valid @RequestBody CartInfo cartInfo) {
-        orderDetailService.saveOrderDetails(cartInfo);
+    public void saveOrderDetails(@Valid @RequestBody CartDto cartDto) {
+        orderDetailService.saveOrderDetails(cartDto);
     }
 
     @PutMapping("/{orderId}")
-    public void updateCartItem(@PathVariable Long orderId, @RequestBody CartLineInfo cartLineInfo) {
-        orderDetailService.updateCartItem(orderId, cartLineInfo);
+    public void updateCartItem(@PathVariable Long orderId, @RequestBody CartLineDto cartLineDto) {
+        orderDetailService.updateCartItem(orderId, cartLineDto);
     }
 
     @DeleteMapping("/{orderId}/{productCode}")

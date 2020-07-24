@@ -1,49 +1,68 @@
 package com.example.ShoppingCart.service;
 
-import com.example.ShoppingCart.dao.OrderDao;
-import com.example.ShoppingCart.dao.OrderDetailDao;
-import com.example.ShoppingCart.dto.CustomerInfo;
+import com.example.ShoppingCart.dao.OrderDaoImpl;
+import com.example.ShoppingCart.dao.OrderDetailDaoImpl;
+import com.example.ShoppingCart.dto.CustomerDto;
+import com.example.ShoppingCart.dto.OrderDto;
 import com.example.ShoppingCart.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class OrderService {
 
     @Autowired
-    private OrderDao orderDao;
+    private OrderDaoImpl orderDao;
 
     @Autowired
-    private OrderDetailDao orderDetailDao;
+    private OrderDetailDaoImpl orderDetailDao;
 
-    public List<Order> getOrders() {
-        return orderDao.findAll();
+    public List<OrderDto> getOrders() {
+        List<Order> orders = orderDao.findAll();
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        orders.forEach(order -> {
+            orderDtoList.add(getOrderInfo(order));
+        });
+        return orderDtoList;
     }
 
-    public Order getOrder(final Long orderId) {
-        return orderDao.findById(orderId)
+    public OrderDto getOrder(final Long orderId) {
+        Order order = orderDao.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("OrderId " + orderId + " not found"));
+        return getOrderInfo(order);
     }
 
-    public void updateOrder(final Long orderId, final CustomerInfo customerInfo) {
+    public void updateOrder(final Long orderId, final CustomerDto customerInfo) {
         Order order = orderDao.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("OrderId " + orderId + " not found"));
         order.setCustomerAddress(customerInfo.getAddress());
         order.setCustomerEmail(customerInfo.getEmail());
         order.setCustomerName(customerInfo.getName());
         order.setCustomerPhone(customerInfo.getPhone());
-        orderDao.save(order);
+        orderDao.update(order);
     }
 
     public void removeOrder(final Long orderId) {
         Order order = orderDao.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("OrderId " + orderId + " not found"));
         orderDao.delete(order);
-        orderDetailDao.deleteByOrderLineId_OrderId(orderId);
+        orderDetailDao.deleteByOrderId(orderId);
     }
+
+    private OrderDto getOrderInfo(Order order) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setOrderId(order.getId());
+        orderDto.setCustomerName(order.getCustomerName());
+        orderDto.setCustomerEmail(order.getCustomerEmail());
+        orderDto.setCustomerPhone(order.getCustomerPhone());
+        orderDto.setCustomerAddress(order.getCustomerAddress());
+        orderDto.setAmount(order.getAmount());
+        orderDto.setOrderDate(order.getOrderDate());
+        return orderDto;
+    }
+
 }

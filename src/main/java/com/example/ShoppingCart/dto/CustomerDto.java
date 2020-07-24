@@ -1,6 +1,6 @@
 package com.example.ShoppingCart.dto;
 
-public class CustomerInfo {
+public class CustomerDto {
 
     private String name;
     private String address;

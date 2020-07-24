@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -18,7 +19,7 @@ public class Order {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date orderDate;
 
-    @Column(name = "amount")
+    @Column(name = "amount", precision = 2)
     private double amount;
 
     @Column(name = "customer_name")
@@ -32,6 +33,9 @@ public class Order {
 
     @Column(name = "customer_phone")
     private String customerPhone;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetails;
 
     public Long getId() {
         return id;
@@ -89,4 +93,11 @@ public class Order {
         this.customerPhone = customerPhone;
     }
 
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
 }

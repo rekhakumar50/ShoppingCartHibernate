@@ -1,15 +1,15 @@
 package com.example.ShoppingCart.dto;
 
-public class CartLineInfo {
+public class CartLineDto {
 
-    private ProductInfo productInfo;
+    private ProductDto productInfo;
     private int quantity;
 
-    public ProductInfo getProductInfo() {
+    public ProductDto getProductInfo() {
         return productInfo;
     }
 
-    public void setProductInfo(ProductInfo productInfo) {
+    public void setProductInfo(ProductDto productInfo) {
         this.productInfo = productInfo;
     }
 

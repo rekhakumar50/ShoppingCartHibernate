@@ -1,16 +1,14 @@
 package com.example.ShoppingCart.service;
 
-import com.example.ShoppingCart.dao.OrderDao;
-import com.example.ShoppingCart.dao.OrderDetailDao;
-import com.example.ShoppingCart.dao.ProductDao;
+import com.example.ShoppingCart.dao.OrderDaoImpl;
+import com.example.ShoppingCart.dao.OrderDetailDaoImpl;
+import com.example.ShoppingCart.dao.ProductDaoImpl;
 import com.example.ShoppingCart.dto.*;
 import com.example.ShoppingCart.model.Order;
 import com.example.ShoppingCart.model.OrderDetail;
-import com.example.ShoppingCart.model.OrderLineId;
 import com.example.ShoppingCart.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -19,26 +17,25 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-@Transactional
 public class OrderDetailService {
 
     @Autowired
-    private OrderDetailDao orderDetailDao;
+    private OrderDetailDaoImpl orderDetailDao;
 
     @Autowired
-    private OrderDao orderDao;
+    private OrderDaoImpl orderDao;
 
     @Autowired
-    private ProductDao productDao;
+    private ProductDaoImpl productDao;
 
-    public List<OrderDetailInfo> getAllOrderDetailsByOrderId(final Long orderId) {
-        List<OrderDetail> orderDetails = orderDetailDao.findOrderDetailByOrderLineId_OrderId(orderId);
+    public List<OrderDetailDto> getAllOrderDetailsByOrderId(final Long orderId) {
+        List<OrderDetail> orderDetails = orderDetailDao.findOrderDetailByOrderId(orderId);
+        List<OrderDetailDto> orderDetailInfoList = new ArrayList<>();
 
-        List<OrderDetailInfo> orderDetailInfoList = new ArrayList<>();
-
+        AtomicInteger productNo = new AtomicInteger(0);
         orderDetails.forEach(orderDetail -> {
-            OrderDetailInfo orderDetailInfo = new OrderDetailInfo();
-            orderDetailInfo.setProductNo(orderDetail.getOrderLineId().getLineNum());
+            OrderDetailDto orderDetailInfo = new OrderDetailDto();
+            orderDetailInfo.setProductNo(productNo.incrementAndGet());
             orderDetailInfo.setCode(orderDetail.getProduct().getCode());
             orderDetailInfo.setName(orderDetail.getProduct().getName());
             orderDetailInfo.setPrice(orderDetail.getProduct().getPrice());
@@ -51,12 +48,12 @@ public class OrderDetailService {
         return orderDetailInfoList;
     }
 
-    public void saveOrderDetails(final CartInfo cartInfo) {
+    public void saveOrderDetails(final CartDto cartInfo) {
         Order order = new Order();
         order.setOrderDate(new Date());
         order.setAmount(cartInfo.getAmountTotal());
 
-        CustomerInfo customerInfo = cartInfo.getCustomerInfo();
+        CustomerDto customerInfo = cartInfo.getCustomerInfo();
         order.setCustomerName(customerInfo.getName());
         order.setCustomerEmail(customerInfo.getEmail());
         order.setCustomerPhone(customerInfo.getPhone());
@@ -64,14 +61,9 @@ public class OrderDetailService {
 
         orderDao.save(order);
 
-        AtomicInteger items = new AtomicInteger();
-
         cartInfo.getCartLines().forEach(cartLineInfo -> {
             OrderDetail orderDetail = new OrderDetail();
-            OrderLineId orderLineId = new OrderLineId();
-            orderLineId.setOrderId(order.getId());
-            orderLineId.setLineNum(items.incrementAndGet());
-            orderDetail.setOrderLineId(orderLineId);
+            orderDetail.setOrder(order);
             orderDetail.setAmount(cartLineInfo.getAmount());
             orderDetail.setPrice(cartLineInfo.getProductInfo().getPrice());
             orderDetail.setQuanity(cartLineInfo.getQuantity());
@@ -85,35 +77,36 @@ public class OrderDetailService {
         });
     }
 
-    public void updateCartItem(final long orderId, final CartLineInfo cartLineInfo) {
+    public void updateCartItem(final long orderId, final CartLineDto cartLineInfo) {
         Order order = orderDao.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("orderId " + orderId + " not found!"));
 
-        List<OrderDetail> orderDetails = orderDetailDao.findOrderDetailByOrderLineId_OrderId(orderId);
-        OrderDetail orderDetail = orderDetails.stream()
-                .filter(o -> cartLineInfo.getProductInfo().getCode().equals(o.getProduct().getCode()))
-                .findAny()
+        OrderDetail orderDetail =
+                orderDetailDao.findByOrderIdAndProductCode(orderId, cartLineInfo.getProductInfo().getCode())
                 .orElseThrow(() -> new EntityNotFoundException("product Code " + cartLineInfo.getProductInfo().getCode() + " not found!"));
         orderDetail.setQuanity(cartLineInfo.getQuantity());
         orderDetail.setAmount(cartLineInfo.getAmount());
-        orderDetailDao.save(orderDetail);
+        orderDetailDao.update(orderDetail);
 
-        double totalAmount = orderDetailDao.findOrderDetailTotalAmount(orderId);
         order.setOrderDate(new Date());
-        order.setAmount(totalAmount);
-        orderDao.save(order);
+        order.setAmount(getTotalAmount(orderId));
+        orderDao.update(order);
     }
 
     public void deleteCartItem(final long orderId, final String productCode) {
         Order order = orderDao.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("orderId " + orderId + " not found!"));
 
-        orderDetailDao.deleteByOrderLineId_OrderIdAndProduct_Code(orderId, productCode);
+        orderDetailDao.deleteByOrderIdAndProduct_Code(orderId, productCode);
 
-        double totalAmount = orderDetailDao.findOrderDetailTotalAmount(orderId);
         order.setOrderDate(new Date());
-        order.setAmount(totalAmount);
-        orderDao.save(order);
+        order.setAmount(getTotalAmount(orderId));
+        orderDao.update(order);
+    }
+
+    private double getTotalAmount(long orderId) {
+        List<OrderDetail> orderDetails = orderDetailDao.findOrderDetailByOrderId(orderId);
+        return orderDetails.stream().mapToDouble(OrderDetail::getAmount).sum();
     }
 
 }

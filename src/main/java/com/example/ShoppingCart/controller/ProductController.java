@@ -1,5 +1,6 @@
 package com.example.ShoppingCart.controller;
 
+import com.example.ShoppingCart.dto.ProductDto;
 import com.example.ShoppingCart.model.Product;
 import com.example.ShoppingCart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,17 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/name")
-    public List<Product> getProductsByName(@RequestParam(value = "name") String name) {
+    public List<ProductDto> getProductsByName(@RequestParam(value = "name") String name) {
         return productService.getProductByName(name);
     }
 
     @GetMapping({"/code"})
-    public Product getProductByCode(@RequestParam(value = "code") String code) {
+    public ProductDto getProductByCode(@RequestParam(value = "code") String code) {
         return productService.getProduct(code);
     }
 
     @GetMapping
-    public List<Product> getProducts() {
+    public List<ProductDto> getProducts() {
         return productService.getAllProducts();
     }
 

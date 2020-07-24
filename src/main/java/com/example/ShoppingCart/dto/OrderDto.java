@@ -3,44 +3,22 @@ package com.example.ShoppingCart.dto;
 import java.util.Date;
 import java.util.List;
 
-public class OrderInfo {
-    private String id;
-    private Date orderDate;
-    private int orderNum;
-    private double amount;
+public class OrderDto {
 
+    private long orderId;
     private String customerName;
     private String customerAddress;
     private String customerEmail;
     private String customerPhone;
+    private double amount;
+    private Date orderDate;
 
-    private List<OrderDetailInfo> details;
-
-    public OrderInfo() {
-
+    public long getOrderId() {
+        return orderId;
     }
 
-    // Using for Hibernate Query.
-    public OrderInfo(String id, Date orderDate, int orderNum, //
-                     double amount, String customerName, String customerAddress, //
-                     String customerEmail, String customerPhone) {
-        this.id = id;
-        this.orderDate = orderDate;
-        this.orderNum = orderNum;
-        this.amount = amount;
-
-        this.customerName = customerName;
-        this.customerAddress = customerAddress;
-        this.customerEmail = customerEmail;
-        this.customerPhone = customerPhone;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public Date getOrderDate() {
@@ -49,14 +27,6 @@ public class OrderInfo {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public int getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(int orderNum) {
-        this.orderNum = orderNum;
     }
 
     public double getAmount() {
@@ -97,13 +67,5 @@ public class OrderInfo {
 
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
-    }
-
-    public List<OrderDetailInfo> getDetails() {
-        return details;
-    }
-
-    public void setDetails(List<OrderDetailInfo> details) {
-        this.details = details;
     }
 }

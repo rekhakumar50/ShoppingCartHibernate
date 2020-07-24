@@ -1,16 +1,21 @@
 package com.example.ShoppingCart.dao;
 
 import com.example.ShoppingCart.model.Product;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-@Transactional
-public interface ProductDao extends JpaRepository<Product, String> {
+public interface ProductDao {
 
     List<Product> findByNameContaining(String name);
 
+    List<Product> findAll();
+
+    Optional<Product> findById(String code);
+
+    void save(Product product);
+
+    void deleteById(String code);
+
+    void update(Product product);
 }

@@ -1,11 +1,18 @@
 package com.example.ShoppingCart.dao;
 
 import com.example.ShoppingCart.model.Order;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-@Repository
-@Transactional
-public interface OrderDao extends JpaRepository<Order, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface OrderDao {
+    List<Order> findAll();
+
+    Optional<Order> findById(Long orderId);
+
+    void save(Order order);
+
+    void update(Order order);
+
+    void delete(Order order);
 }

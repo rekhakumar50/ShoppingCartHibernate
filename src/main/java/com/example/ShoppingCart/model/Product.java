@@ -3,6 +3,7 @@ package com.example.ShoppingCart.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
@@ -17,7 +18,7 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
+    @Column(name = "price", precision = 2)
     private Double price;
 
     @Column(name = "picture_url")
@@ -26,6 +27,9 @@ public class Product {
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> OrderDetails;
 
     public String getCode() {
         return code;
@@ -65,5 +69,13 @@ public class Product {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return OrderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        OrderDetails = orderDetails;
     }
 }

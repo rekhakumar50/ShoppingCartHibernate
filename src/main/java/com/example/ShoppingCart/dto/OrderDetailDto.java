@@ -1,6 +1,6 @@
 package com.example.ShoppingCart.dto;
 
-public class OrderDetailInfo {
+public class OrderDetailDto {
 
     private int productNo;
     private String code;

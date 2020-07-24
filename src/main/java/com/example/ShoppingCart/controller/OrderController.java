@@ -1,7 +1,7 @@
 package com.example.ShoppingCart.controller;
 
-import com.example.ShoppingCart.dto.CustomerInfo;
-import com.example.ShoppingCart.model.Order;
+import com.example.ShoppingCart.dto.CustomerDto;
+import com.example.ShoppingCart.dto.OrderDto;
 import com.example.ShoppingCart.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +16,12 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/{orderId}")
-    public Order getOrder(@PathVariable Long orderId) {
+    public OrderDto getOrder(@PathVariable Long orderId) {
         return orderService.getOrder(orderId);
     }
 
     @PutMapping("/{orderId}")
-    public void updateOrder(@PathVariable Long orderId, @Valid @RequestBody CustomerInfo customerInfo) {
+    public void updateOrder(@PathVariable Long orderId, @Valid @RequestBody CustomerDto customerInfo) {
         orderService.updateOrder(orderId, customerInfo);
     }
 

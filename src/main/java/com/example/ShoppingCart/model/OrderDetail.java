@@ -6,10 +6,15 @@ import javax.persistence.*;
 @Table(name = "order_detail")
 public class OrderDetail {
 
-    @EmbeddedId
-    private OrderLineId orderLineId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -22,12 +27,20 @@ public class OrderDetail {
     @Column(name = "amount")
     private double amount;
 
-    public OrderLineId getOrderLineId() {
-        return orderLineId;
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderLineId(OrderLineId orderLineId) {
-        this.orderLineId = orderLineId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public Product getProduct() {
