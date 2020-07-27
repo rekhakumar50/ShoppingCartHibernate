@@ -48,7 +48,7 @@ public class OrderDetailService {
         return orderDetailInfoList;
     }
 
-    public void saveOrderDetails(final CartDto cartInfo) {
+    public long saveOrderDetails(final CartDto cartInfo) {
         Order order = new Order();
         order.setOrderDate(new Date());
         order.setAmount(cartInfo.getAmountTotal());
@@ -59,7 +59,7 @@ public class OrderDetailService {
         order.setCustomerPhone(customerInfo.getPhone());
         order.setCustomerAddress(customerInfo.getAddress());
 
-        orderDao.save(order);
+        long orderId = orderDao.save(order);
 
         cartInfo.getCartLines().forEach(cartLineInfo -> {
             OrderDetail orderDetail = new OrderDetail();
@@ -75,6 +75,7 @@ public class OrderDetailService {
 
             orderDetailDao.save(orderDetail);
         });
+        return orderId;
     }
 
     public void updateCartItem(final long orderId, final CartLineDto cartLineInfo) {

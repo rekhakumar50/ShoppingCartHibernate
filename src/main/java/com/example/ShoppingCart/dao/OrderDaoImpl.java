@@ -53,9 +53,9 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public void save(Order order) {
+    public long save(Order order) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(order);
+        return (long) session.save(order);
     }
 
     @Override

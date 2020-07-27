@@ -10,7 +10,7 @@ public interface OrderDao {
 
     Optional<Order> findById(Long orderId);
 
-    void save(Order order);
+    long save(Order order);
 
     void update(Order order);
 
