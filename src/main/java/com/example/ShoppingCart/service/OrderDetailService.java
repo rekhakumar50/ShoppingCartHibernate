@@ -1,8 +1,8 @@
 package com.example.ShoppingCart.service;
 
-import com.example.ShoppingCart.dao.OrderDaoImpl;
-import com.example.ShoppingCart.dao.OrderDetailDaoImpl;
-import com.example.ShoppingCart.dao.ProductDaoImpl;
+import com.example.ShoppingCart.dao.OrderDao;
+import com.example.ShoppingCart.dao.OrderDetailDao;
+import com.example.ShoppingCart.dao.ProductDao;
 import com.example.ShoppingCart.dto.*;
 import com.example.ShoppingCart.model.Order;
 import com.example.ShoppingCart.model.OrderDetail;
@@ -20,13 +20,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OrderDetailService {
 
     @Autowired
-    private OrderDetailDaoImpl orderDetailDao;
+    private OrderDetailDao orderDetailDao;
 
     @Autowired
-    private OrderDaoImpl orderDao;
+    private OrderDao orderDao;
 
     @Autowired
-    private ProductDaoImpl productDao;
+    private ProductDao productDao;
 
     public List<OrderDetailDto> getAllOrderDetailsByOrderId(final Long orderId) {
         List<OrderDetail> orderDetails = orderDetailDao.findOrderDetailByOrderId(orderId);

@@ -13,6 +13,20 @@ public class OrderDto {
     private double amount;
     private Date orderDate;
 
+    public OrderDto() {
+    }
+
+    public OrderDto(long orderId, String customerName, String customerAddress, String customerEmail,
+                    String customerPhone, double amount, Date orderDate) {
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.customerAddress = customerAddress;
+        this.customerEmail = customerEmail;
+        this.customerPhone = customerPhone;
+        this.amount = amount;
+        this.orderDate = orderDate;
+    }
+
     public long getOrderId() {
         return orderId;
     }

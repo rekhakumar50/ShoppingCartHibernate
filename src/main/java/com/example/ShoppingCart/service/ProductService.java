@@ -1,6 +1,6 @@
 package com.example.ShoppingCart.service;
 
-import com.example.ShoppingCart.dao.ProductDaoImpl;
+import com.example.ShoppingCart.dao.ProductDao;
 import com.example.ShoppingCart.dto.ProductDto;
 import com.example.ShoppingCart.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductService {
 
     @Autowired
-    private ProductDaoImpl productDao;
+    private ProductDao productDao;
 
     public List<ProductDto> getAllProducts() {
         List<Product> products = productDao.findAll();

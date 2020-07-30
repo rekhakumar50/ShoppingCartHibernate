@@ -9,6 +9,18 @@ public class OrderDetailDto {
     private int quantity;
     private double amount;
 
+    public OrderDetailDto() {
+    }
+
+    public OrderDetailDto(int productNo, String code, String name, double price, int quantity, double amount) {
+        this.productNo = productNo;
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.amount = amount;
+    }
+
     public int getProductNo() {
         return productNo;
     }

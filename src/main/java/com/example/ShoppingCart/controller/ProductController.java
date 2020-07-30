@@ -20,8 +20,8 @@ public class ProductController {
         return productService.getProductByName(name);
     }
 
-    @GetMapping({"/code"})
-    public ProductDto getProductByCode(@RequestParam(value = "code") String code) {
+    @GetMapping("/{code}")
+    public ProductDto getProductByCode(@PathVariable(value = "code") String code) {
         return productService.getProduct(code);
     }
 
@@ -40,8 +40,8 @@ public class ProductController {
         productService.updateProduct(product);
     }
 
-    @DeleteMapping
-    public void deleteProducts(@RequestParam String code) {
+    @DeleteMapping(("/{code}"))
+    public void deleteProducts(@PathVariable String code) {
         productService.deleteProducts(code);
     }
 

@@ -1,6 +1,6 @@
 package com.example.ShoppingCart.service;
 
-import com.example.ShoppingCart.dao.UserAccountDaoImpl;
+import com.example.ShoppingCart.dao.UserAccountDao;
 import com.example.ShoppingCart.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceAuth implements UserDetailsService {
 
     @Autowired
-    private UserAccountDaoImpl accountDAO;
+    private UserAccountDao userAccountDao;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<UserAccount> account = accountDAO.findByUserName(userName);
+        Optional<UserAccount> account = userAccountDao.findByUserName(userName);
 
         if (account.isEmpty()) {
             throw new UsernameNotFoundException("User " + userName + " was not found in the database");

@@ -1,7 +1,7 @@
 package com.example.ShoppingCart.service;
 
-import com.example.ShoppingCart.dao.OrderDaoImpl;
-import com.example.ShoppingCart.dao.OrderDetailDaoImpl;
+import com.example.ShoppingCart.dao.OrderDao;
+import com.example.ShoppingCart.dao.OrderDetailDao;
 import com.example.ShoppingCart.dto.CustomerDto;
 import com.example.ShoppingCart.dto.OrderDto;
 import com.example.ShoppingCart.model.Order;
@@ -16,10 +16,10 @@ import java.util.List;
 public class OrderService {
 
     @Autowired
-    private OrderDaoImpl orderDao;
+    private OrderDao orderDao;
 
     @Autowired
-    private OrderDetailDaoImpl orderDetailDao;
+    private OrderDetailDao orderDetailDao;
 
     public List<OrderDto> getOrders() {
         List<Order> orders = orderDao.findAll();

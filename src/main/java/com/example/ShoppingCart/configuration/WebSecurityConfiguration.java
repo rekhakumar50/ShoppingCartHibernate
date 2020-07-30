@@ -1,6 +1,6 @@
 package com.example.ShoppingCart.configuration;
 
-import com.example.ShoppingCart.service.UserDetailsServiceImpl;
+import com.example.ShoppingCart.service.UserDetailsServiceAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceAuth userDetailsServiceAuth;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsServiceAuth).passwordEncoder(passwordEncoder());
     }
 
     @Override

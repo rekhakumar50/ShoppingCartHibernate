@@ -7,6 +7,17 @@ public class CustomerDto {
     private String email;
     private String phone;
 
+    public CustomerDto(String name, String address, String email, String phone) {
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public CustomerDto() {
+
+    }
+
     public void setName(String name) {
         this.name = name;
     }

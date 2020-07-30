@@ -10,6 +10,17 @@ public class ProductDto {
     private String pictureUrl;
     private Date createDate;
 
+    public ProductDto() {
+    }
+
+    public ProductDto(String code, String name, double price, String pictureUrl, Date createDate) {
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.pictureUrl = pictureUrl;
+        this.createDate = createDate;
+    }
+
     public String getCode() {
         return code;
     }
